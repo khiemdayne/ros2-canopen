@@ -1,0 +1,4 @@
+ros2 launch canopen_tests cia402_setup.launch.py
+call service /cia402_device_1/init if need Reset
+call service /cia402_device_1/velocity_mode to set Mode
+call service /cia402_device_1/target set vel
