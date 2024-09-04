@@ -71,4 +71,4 @@ def generate_launch_description():
         }.items(),
     )
 
-    return LaunchDescription([slave_node_1, device_container])
+    return LaunchDescription([device_container])
