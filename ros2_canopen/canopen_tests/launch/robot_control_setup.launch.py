@@ -84,30 +84,30 @@ def generate_launch_description():
         arguments=["-d", rviz_config_file],
     )
 
-    slave_config = PathJoinSubstitution(
-        [FindPackageShare("canopen_tests"), "config/robot_control", "cia402_slave.eds"]
-    )
+    # slave_config = PathJoinSubstitution(
+    #     [FindPackageShare("canopen_tests"), "config/robot_control", "cia402_slave.eds"]
+    # )
 
-    slave_launch = PathJoinSubstitution(
-        [FindPackageShare("canopen_fake_slaves"), "launch", "cia402_slave.launch.py"]
-    )
-    slave_node_1 = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(slave_launch),
-        launch_arguments={
-            "node_id": "2",
-            "node_name": "slave_node_1",
-            "slave_config": slave_config,
-        }.items(),
-    )
+    # slave_launch = PathJoinSubstitution(
+    #     [FindPackageShare("canopen_fake_slaves"), "launch", "cia402_slave.launch.py"]
+    # )
+    # slave_node_1 = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(slave_launch),
+    #     launch_arguments={
+    #         "node_id": "2",
+    #         "node_name": "slave_node_1",
+    #         "slave_config": slave_config,
+    #     }.items(),
+    # )
 
-    slave_node_2 = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(slave_launch),
-        launch_arguments={
-            "node_id": "3",
-            "node_name": "slave_node_2",
-            "slave_config": slave_config,
-        }.items(),
-    )
+    # slave_node_2 = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(slave_launch),
+    #     launch_arguments={
+    #         "node_id": "3",
+    #         "node_name": "slave_node_2",
+    #         "slave_config": slave_config,
+    #     }.items(),
+    # )
 
     nodes_to_start = [
         # slave_node_2,
@@ -117,8 +117,8 @@ def generate_launch_description():
         # robot_controller_spawner,
         forward_position_controller_spawner,
         robot_state_publisher_node,
-        slave_node_1,
-        slave_node_2,
+        # slave_node_1,
+        # slave_node_2,
         rviz_node
     ]
 
