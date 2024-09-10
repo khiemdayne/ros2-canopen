@@ -23,6 +23,7 @@
 #include "canopen_base_driver/lely_driver_bridge.hpp"
 #include "canopen_interfaces/srv/co_target_double.hpp"
 #include "canopen_proxy_driver/node_interfaces/node_canopen_proxy_driver.hpp"
+#include "canopen_base_driver/node_interfaces/node_canopen_base_driver.hpp"
 #include "sensor_msgs/msg/joint_state.hpp"
 
 namespace ros2_canopen
