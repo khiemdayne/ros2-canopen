@@ -16,7 +16,7 @@ joint_1:
   position_mode: 1
   revision_number: 0
   scale_pos_to_dev: 1592.35669      #scale_pos_to_dev = 10000 / (2 * pi) = 1592.35669     "10000 is motor resolution"
-  scale_pos_from_dev: 0.000628     #scale_pos_from_dev = (2 * pi) / 10000 = 0.000628
+  scale_pos_from_dev: 0.000628     #scale_pos_from_dev = (2 * pi) / 10000 = 0.00062831853
   scale_vel_from_dev: 0.00036621093 #scale_vel_to_dev = (10000 * 10) / (2 * pi) = 26075.946   
   scale_vel_to_dev: 2730.66666667   #scale_vel_from_dev = (2 * pi) / (10000 * 10) = 6.28e-5
   # sdo:
@@ -96,4 +96,4 @@ joint_2:
       cob_id: "auto"
       mapping:
       - {index: 0x607A, sub_index: 0} # target position
-      # - {index: 0x60FF, sub_index: 0} # target velocity
+      - {index: 0x60FF, sub_index: 0} # target velocity

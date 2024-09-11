@@ -150,23 +150,23 @@ def launch_setup(context, *args, **kwargs):
         [FindPackageShare("canopen_tests"), "config/cia402", "cia402_slave.eds"]
     )
 
-    slave_launch = PathJoinSubstitution(
-        [FindPackageShare("canopen_fake_slaves"), "launch", "cia402_slave.launch.py"]
-    )
-    slave_node_1 = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(slave_launch),
-        launch_arguments={
-            "node_id": "2",
-            "node_name": "cia402_node_1",
-            "slave_config": slave_config,
-        }.items(),
-    )
+    # slave_launch = PathJoinSubstitution(
+    #     [FindPackageShare("canopen_fake_slaves"), "launch", "cia402_slave.launch.py"]
+    # )
+    # slave_node_1 = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(slave_launch),
+    #     launch_arguments={
+    #         "node_id": "2",
+    #         "node_name": "cia402_node_1",
+    #         "slave_config": slave_config,
+    #     }.items(),
+    # )
 
     nodes_to_start = [
         control_node,
         robot_state_publisher_node,
         joint_state_broadcaster_spawner,
-        slave_node_1,
+        # slave_node_1,
         cia402_device_controller_spawner,
         forward_position_controller,
     ]

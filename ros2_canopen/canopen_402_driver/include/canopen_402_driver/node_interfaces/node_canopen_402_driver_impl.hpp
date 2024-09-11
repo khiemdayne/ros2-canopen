@@ -99,7 +99,7 @@ void NodeCanopen402Driver<rclcpp::Node>::init(bool called_from_base)
     std::bind(
       &NodeCanopen402Driver<rclcpp::Node>::handle_set_mode_torque, this, std::placeholders::_1,
       std::placeholders::_2));
-RCLCPP_ERROR(this->node_->get_logger(), "HEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHE");
+RCLCPP_ERROR(this->node_->get_logger(), "this is a template init canopen");
   handle_set_target_service = this->node_->create_service<canopen_interfaces::srv::COTargetDouble>(
     std::string(this->node_->get_name()).append("/target").c_str(),
     std::bind(
