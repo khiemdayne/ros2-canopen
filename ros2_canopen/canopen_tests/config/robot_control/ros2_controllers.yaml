@@ -15,7 +15,7 @@ robot_controller:
     joints:
       - joint1
       - joint2
-    operation_mode: 1
+    operation_mode: 3 # 1 is position, 3: velocity
     command_poll_freq: 5 #frequency with which the controller polls for command feedback
 
 forward_position_controller:

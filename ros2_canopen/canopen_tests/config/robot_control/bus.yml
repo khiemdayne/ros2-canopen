@@ -15,10 +15,11 @@ joint_1:
   period: 10
   position_mode: 1
   revision_number: 0
-  scale_pos_to_dev: 1592.35669      #scale_pos_to_dev = 10000 / (2 * pi) = 1592.35669     "10000 is motor resolution"
-  scale_pos_from_dev: 0.000628     #scale_pos_from_dev = (2 * pi) / 10000 = 0.00062831853
-  scale_vel_from_dev: 0.00036621093 #scale_vel_to_dev = (10000 * 10) / (2 * pi) = 26075.946   
-  scale_vel_to_dev: 2730.66666667   #scale_vel_from_dev = (2 * pi) / (10000 * 10) = 6.28e-5
+  scale_pos_to_dev: 1591.54943      # scale_pos_to_dev = 10000 / (2 * pi) = 1591.54943    10000 is motor resolution"
+  scale_pos_from_dev: 0.00062831853  #scale_pos_from_dev = (2 * pi) / 10000 = 0.00062831853 (radians)
+  scale_vel_from_dev: 0.00036621094 #scale_vel_to_dev = RPM = .... 
+  scale_vel_to_dev: 2730.66666667   #scale_vel_from_dev = DEC=[(RPM*512*encoder resolution)/1875]
+
   # sdo:
   #   - {index: 0x60C2, sub_index: 1, value: 50} # Set interpolation time for cyclic modes to 50 ms
   #   - {index: 0x60C2, sub_index: 2, value: -3} # Set base 10-3s

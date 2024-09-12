@@ -13,8 +13,8 @@ defaults:
   package: "canopen_402_driver"
   period: 10
   revision_number: 0
-  scale_pos_to_dev: 1592.35669      #scale_pos_to_dev = 10000 / (2 * pi) = 1592.35669     "10000 is motor resolution"
-  scale_pos_from_dev: 0.000628     #scale_pos_from_dev = (2 * pi) / 10000 = 0.000628
+  scale_pos_to_dev: 1      #scale_pos_to_dev = 10000 / (2 * pi) = 1592.35669     "10000 is motor resolution"
+  scale_pos_from_dev: 1    #scale_pos_from_dev = (2 * pi) / 10000 = 0.000628
   scale_vel_from_dev: 0.00036621093 #scale_vel_to_dev = (10000 * 10) / (2 * pi) = 26075.946   
   scale_vel_to_dev: 2730.66666667   #scale_vel_from_dev = (2 * pi) / (10000 * 10) = 6.28e-5
 
