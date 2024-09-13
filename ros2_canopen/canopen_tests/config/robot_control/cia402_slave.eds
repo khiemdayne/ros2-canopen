@@ -39,7 +39,8 @@ SupportedObjects=3
 
 
 [ManufacturerObjects]
-SupportedObjects=0
+SupportedObjects=1
+1=0x2020
 
 [OptionalObjects]
 SupportedObjects=37
@@ -517,6 +518,18 @@ AccessType=rw
 DefaultValue=0xFF
 PDOMapping=0
 
+[2020]
+SubNumber=1
+ParameterName=DIN parameter
+ObjectType=0x09
+
+[2020subF]
+ParameterName=DIN Controlword
+ObjectType=0x07
+DataType=0x0006
+AccessType=rw
+DefaultValue=0x02F
+PDOMapping=0
 
 
 [1600]

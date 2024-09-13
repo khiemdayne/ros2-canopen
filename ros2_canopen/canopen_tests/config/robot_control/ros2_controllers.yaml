@@ -14,7 +14,7 @@ robot_controller:
   ros__parameters:
     joints:
       - joint1
-      - joint2
+      # - joint2
     operation_mode: 3 # 1 is position, 3: velocity
     command_poll_freq: 5 #frequency with which the controller polls for command feedback
 
@@ -22,7 +22,7 @@ forward_position_controller:
   ros__parameters:
     joints:
       - joint1
-      - joint2
+      # - joint2
     interface_name: position
 
 # joint_trajectory_controller:

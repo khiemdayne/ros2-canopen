@@ -306,13 +306,15 @@ void Motor402::handleWrite() {
   if (start_fault_reset_.exchange(false)) {
     RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Fault reset");
     this->driver->universal_set_value<uint16_t>(
-        control_word_entry_index, 0x0,
+        // control_word_entry_index, 0x0,
+        control_word_entry_index, 0x0F,
         control_word_ & ~(1 << Command402::CW_Fault_Reset));
   } else {
-    // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Control Word %s",
+    // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver - khyem nguyen"), "Control Word %d",control_word_);
     // std::bitset<16>{control_word_}.to_string());
     this->driver->universal_set_value<uint16_t>(
-        control_word_entry_index, 0x0, control_word_);
+        // control_word_entry_index, 0x0, control_word_);
+        control_word_entry_index, 0x0F, control_word_);
   }
 }
 void Motor402::handleDiag()
