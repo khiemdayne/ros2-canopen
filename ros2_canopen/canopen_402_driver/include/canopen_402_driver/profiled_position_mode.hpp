@@ -65,7 +65,7 @@ public:
   }
   virtual bool write(OpModeAccesser & cw)
   {
-    // cw.set(CW_Immediate);
+    cw.set(CW_Immediate);
     if (hasTarget())
     {
       int32_t target = getTarget();
