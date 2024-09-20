@@ -844,7 +844,7 @@ public:
       this->dictionary_->setVal<T>(index, subindex, value);
       this->tpdo_mapped[index][subindex] = value;
       this->tpdo_mapped[index][subindex].WriteEvent();
-      std::cout << "khyem nguyen: rpdo write - 847"<<std::endl;
+      // std::cout << "khyem nguyen: rpdo write - 847"<<std::endl;
     }
     else
     {

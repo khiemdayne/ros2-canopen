@@ -25,19 +25,19 @@ def generate_launch_description():
         get_package_share_directory("canopen_tests"), "config", "cia402", "cia402_slave.eds"
     )
 
-    slave_node_1 = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [
-                os.path.join(get_package_share_directory("canopen_fake_slaves"), "launch"),
-                "/cia402_slave.launch.py",
-            ]
-        ),
-        launch_arguments={
-            "node_id": "2",
-            "node_name": "cia402_node_1",
-            "slave_config": slave_eds_path,
-        }.items(),
-    )
+    # slave_node_1 = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(
+    #         [
+    #             os.path.join(get_package_share_directory("canopen_fake_slaves"), "launch"),
+    #             "/cia402_slave.launch.py",
+    #         ]
+    #     ),
+    #     launch_arguments={
+    #         "node_id": "2",
+    #         "node_name": "cia402_node_1",
+    #         "slave_config": slave_eds_path,
+    #     }.items(),
+    # )
     master_bin_path = os.path.join(
         get_package_share_directory("canopen_tests"),
         "config",

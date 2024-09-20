@@ -1,6 +1,6 @@
 [DeviceInfo]
 VendorName=ROS-Industrial
-VendorNumber=0x00000300
+VendorNumber=0x00000331
 ProductName=CIA402VTD
 BaudRate_10=0
 BaudRate_20=0
@@ -341,7 +341,7 @@ ParameterName=Vendor Id
 ObjectType=0x07
 DataType=0x0007
 AccessType=ro
-DefaultValue=0x00000300
+DefaultValue=0x00000331
 PDOMapping=0
 
 [1018sub2]

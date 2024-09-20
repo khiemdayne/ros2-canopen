@@ -218,8 +218,8 @@ private:
 
   std::shared_ptr<LelyDriverBridge> driver;
   const uint16_t status_word_entry_index = 0x6041;
-  // const uint16_t control_word_entry_index = 0x6040;
-  const uint16_t control_word_entry_index = 0x2020;
+  const uint16_t control_word_entry_index = 0x6040;
+  // const uint16_t control_word_entry_index = 0x2020;
   const uint16_t op_mode_display_index = 0x6061;
   const uint16_t op_mode_index = 0x6060;
   const uint16_t supported_drive_modes_index = 0x6502;
