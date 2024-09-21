@@ -252,62 +252,27 @@ bool Motor402::readState()
   return true;
 }
 void Motor402::handleRead() { readState(); }
-// void Motor402::handleWrite()
-// {
-//   std::scoped_lock lock(cw_mutex_);
-//   control_word_ |= (1 << Command402::CW_Halt);
-//   if (state_handler_.getState() == State402::Operation_Enable)
-//   {
-//     std::scoped_lock lock(mode_mutex_);
-//     Mode::OpModeAccesser cwa(control_word_);
-//     bool okay = false;
-//     if (selected_mode_ && selected_mode_->mode_id_ == mode_id_)
-//     {
-//       okay = selected_mode_->write(cwa);
-//     }
-//     else
-//     {
-//       cwa = 0;
-//     }
-//     if (okay)
-//     {
-//       control_word_ &= ~(1 << Command402::CW_Halt);
-//     }
-//   }
-//   if (start_fault_reset_.exchange(false))
-//   {
-//     RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Fault reset");
-//     this->driver->universal_set_value<uint16_t>(
-//       control_word_entry_index, 0x0, control_word_ & ~(1 << Command402::CW_Fault_Reset));
-//   }
-//   else
-//   {
-//     // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Control Word %s",
-//     // std::bitset<16>{control_word_}.to_string());
-//     this->driver->universal_set_value<uint16_t>(control_word_entry_index, 0x0, control_word_);
-//   }
-// }
+
 void Motor402::handleWrite() {
   std::scoped_lock lock(cw_mutex_);
   // control_word_|= (1 << Command402::CW_Halt);
   if (state_handler_.getState() == State402::Operation_Enable) {
     std::scoped_lock     lock(mode_mutex_);
     Mode::OpModeAccesser cwa(control_word_);
-    bool                 okay= false;
+    bool okay= false;
     if (selected_mode_ && selected_mode_->mode_id_ == mode_id_) {
       okay= selected_mode_->write(cwa);
     } else {
       cwa= 0;
     }
-    // if (okay) {
-    //   control_word_&= ~(1 << Command402::CW_Halt);
-    // }
+    if (okay) {
+      // control_word_&= ~(1 << Command402::CW_Halt);
+    }
   }
   if (start_fault_reset_.exchange(false)) {
     RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Fault reset");
     this->driver->universal_set_value<uint16_t>(
         control_word_entry_index, 0x0,
-        // control_word_entry_index, 0x0F,
         control_word_ & ~(1 << Command402::CW_Fault_Reset));
   } else {
     // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver - khyem nguyen"), "Control Word %d",control_word_);
@@ -391,23 +356,37 @@ bool Motor402::handleInit()
     std::cout << "Could not read motor state" << std::endl;
     return false;
   }
-  {
-    std::scoped_lock lock(cw_mutex_);
-    control_word_ = 7;
-    start_fault_reset_ = true;
-  }
-  // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Init: Enable");
-  // if (!switchState(State402::Operation_Enable))
   // {
-  //   std::cout << "Could not enable motor" << std::endl;
-  //   return false;
+  //   std::scoped_lock lock(cw_mutex_);
+    control_word_ = 0x00;
+  //   start_fault_reset_ = true;
   // }
+  RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Init: Enable");
+  if (!switchState(State402::Operation_Enable))
+  {
+    std::cout << "Could not enable motor" << std::endl;
+    // return false;
+  }
+  
   RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Init: Switch velocity");
   if (!switchMode(MotorBase::Profiled_Velocity))
   {
-    std::cout << "Could not enter no mode" << std::endl;
-    return false;
+    std::cout << "Could not enter vel" << std::endl;
+    // return false;
   }
+
+  std::scoped_lock lock(cw_mutex_);
+  // driver->universal_set_value<int16_t>(control_word_entry_index, 0x0, 0x06);
+  driver->universal_set_value<int16_t>(control_word_entry_index, 0x0, 0x07);
+  // driver->universal_set_value<int32_t>(0x60FF, 0x0, 0x00);
+  
+  // control_word_ = 0x0F;
+  std::cout << "Control world: "<<control_word_ << std::endl;
+  std::cout << "Mode id: "<< Motor402::getMode()<<std::endl;
+
+  driver->universal_set_value<int8_t>(op_mode_index, 0x0, 3);
+  std::cout << "Mode id: "<< Motor402::getMode()<<std::endl;
+
   return true;
 }
 bool Motor402::handleShutdown()

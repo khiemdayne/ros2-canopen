@@ -43,8 +43,10 @@
 
 #include "canopen_core/exchange.hpp"
 
+
 using namespace std::chrono_literals;
 using namespace lely;
+
 
 namespace ros2_canopen
 {
@@ -510,6 +512,7 @@ public:
     }
     return res;
   }
+
 
   /**
    * @brief Aynchronous SDO Read

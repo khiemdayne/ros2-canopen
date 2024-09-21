@@ -86,7 +86,6 @@
         "csetjmp": "cpp",
         "valarray": "cpp"
     },
-    "C_Cpp.errorSquiggles": "enabled",
     "cSpell.words": [
         "bringup",
         "gzserver",
@@ -98,4 +97,5 @@
         "workcell",
         "xacro"
     ],
+    "C_Cpp.default.compilerPath": "/usr/bin/gcc",
 }
