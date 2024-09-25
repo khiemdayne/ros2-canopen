@@ -36,6 +36,7 @@ bool Motor402::isModeSupported(uint16_t mode)
 bool Motor402::enterModeAndWait(uint16_t mode)
 {
   bool okay = mode != MotorBase::Homing && switchMode(mode);
+  RCLCPP_INFO(rclcpp::get_logger("khyemnguyen"), "Mode id: 0x%x", mode);
   return okay;
 }
 
@@ -345,6 +346,8 @@ void Motor402::handleDiag()
 
 bool Motor402::handleInit()
 {
+  std::cout<<""<<std::endl;
+  std::cout<<"|---------------Init-------------khyemnguyen-------------|"<<std::endl;
   for (std::unordered_map<uint16_t, AllocFuncType>::iterator it = mode_allocators_.begin();
        it != mode_allocators_.end(); ++it)
   {
@@ -377,15 +380,15 @@ bool Motor402::handleInit()
 
   std::scoped_lock lock(cw_mutex_);
   // driver->universal_set_value<int16_t>(control_word_entry_index, 0x0, 0x06);
-  driver->universal_set_value<int16_t>(control_word_entry_index, 0x0, 0x07);
+  // driver->universal_set_value<int16_t>(control_word_entry_index, 0x0, 0x07);
   // driver->universal_set_value<int32_t>(0x60FF, 0x0, 0x00);
   
   // control_word_ = 0x0F;
-  std::cout << "Control world: "<<control_word_ << std::endl;
-  std::cout << "Mode id: "<< Motor402::getMode()<<std::endl;
-
-  driver->universal_set_value<int8_t>(op_mode_index, 0x0, 3);
-  std::cout << "Mode id: "<< Motor402::getMode()<<std::endl;
+  // driver->universal_set_value<int8_t>(op_mode_index, 0x0, 3);
+  // std::cout << "Control world("<<control_word_entry_index<<"): "<<control_word_ << std::endl;
+  // std::cout << "Mode id: "<< Motor402::getMode()<<std::endl;
+  RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Control world(6040): 0x%x", control_word_);
+  RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Mode id(6060): 0x%x", Motor402::getMode());
 
   return true;
 }

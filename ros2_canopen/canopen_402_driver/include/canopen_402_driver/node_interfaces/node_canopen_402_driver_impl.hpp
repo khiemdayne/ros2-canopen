@@ -497,15 +497,20 @@ bool NodeCanopen402Driver<NODETYPE>::set_operation_mode(uint16_t mode)
 template <class NODETYPE>
 bool NodeCanopen402Driver<NODETYPE>::set_mode_position()
 {
+  std::cout<<""<<std::endl;
+  std::cout<<"|---------------set_mode_position-------------khyemnguyen-------------|"<<std::endl;
   if (this->activated_.load())
   {
     if (motor_->getMode() != MotorBase::Profiled_Position)
     {
+      // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Mode id: 0x%x", motor_->getMode());
       return motor_->enterModeAndWait(MotorBase::Profiled_Position);
     }
     else
     {
-      return false;
+      // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Mode id: 0x%x", motor_->getMode());
+      RCLCPP_INFO(rclcpp::get_logger("khyemnguyen"), "Already in position mode: 0x%x", motor_->getMode());
+      return true;
     }
   }
   else
@@ -537,15 +542,21 @@ bool NodeCanopen402Driver<NODETYPE>::set_mode_interpolated_position()
 template <class NODETYPE>
 bool NodeCanopen402Driver<NODETYPE>::set_mode_velocity()
 {
+  std::cout<<""<<std::endl;
+  std::cout<<"|---------------set_mode_velocity-------------khyemnguyen-------------|"<<std::endl;
   if (this->activated_.load())
   {
     if (motor_->getMode() != MotorBase::Profiled_Velocity)
     {
+      // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Mode id: 0x%x", motor_->getMode());
       return motor_->enterModeAndWait(MotorBase::Profiled_Velocity);
     }
     else
     {
-      return false;
+    //   RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Mode id: 0x%x", motor_->getMode());
+    //   std::cout<<"Already in velocity mode."<<std::endl;
+      RCLCPP_INFO(rclcpp::get_logger("khyemnguyen"), "Already in velocity mode: 0x%x", motor_->getMode());
+      return true;
     }
   }
   else
