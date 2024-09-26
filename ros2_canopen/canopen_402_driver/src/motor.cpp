@@ -249,7 +249,7 @@ bool Motor402::readState()
   //     RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Internal limit active");
   //   }
   // }
-
+// RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Read state mode id(6061): 0x%x", new_mode);
   return true;
 }
 void Motor402::handleRead() { readState(); }
@@ -347,7 +347,7 @@ void Motor402::handleDiag()
 bool Motor402::handleInit()
 {
   std::cout<<""<<std::endl;
-  std::cout<<"|---------------Init-------------khyemnguyen-------------|"<<std::endl;
+  std::cout<<"[---------------Init-------------khyemnguyen-------------]"<<std::endl;
   for (std::unordered_map<uint16_t, AllocFuncType>::iterator it = mode_allocators_.begin();
        it != mode_allocators_.end(); ++it)
   {
@@ -359,11 +359,11 @@ bool Motor402::handleInit()
     std::cout << "Could not read motor state" << std::endl;
     return false;
   }
-  // {
-  //   std::scoped_lock lock(cw_mutex_);
-    control_word_ = 0x00;
-  //   start_fault_reset_ = true;
-  // }
+  {
+    // std::scoped_lock lock(cw_mutex_);
+    control_word_ = 0;
+    // start_fault_reset_ = true;
+  }
   RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Init: Enable");
   if (!switchState(State402::Operation_Enable))
   {
@@ -378,13 +378,20 @@ bool Motor402::handleInit()
     // return false;
   }
 
+  // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Init: Switch velocity");
+  // if (!switchMode(MotorBase::No_Mode))
+  // {
+  //   std::cout << "Could not enter no mode" << std::endl;
+  //   // return false;
+  // }
+
   std::scoped_lock lock(cw_mutex_);
-  // driver->universal_set_value<int16_t>(control_word_entry_index, 0x0, 0x06);
-  // driver->universal_set_value<int16_t>(control_word_entry_index, 0x0, 0x07);
-  // driver->universal_set_value<int32_t>(0x60FF, 0x0, 0x00);
+  driver->universal_set_value<int16_t>(control_word_entry_index, 0x0, 0x06);
+  driver->universal_set_value<int16_t>(control_word_entry_index, 0x0, 0x07);
+  driver->universal_set_value<int32_t>(0x60FF, 0x0, 0x00);
   
   // control_word_ = 0x0F;
-  // driver->universal_set_value<int8_t>(op_mode_index, 0x0, 3);
+  driver->universal_set_value<int8_t>(op_mode_index, 0x0, 3);
   // std::cout << "Control world("<<control_word_entry_index<<"): "<<control_word_ << std::endl;
   // std::cout << "Mode id: "<< Motor402::getMode()<<std::endl;
   RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Control world(6040): 0x%x", control_word_);
