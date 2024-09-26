@@ -24,6 +24,7 @@ using namespace canopen_ros2_control;
 hardware_interface::CallbackReturn RobotSystem::on_init(
   const hardware_interface::HardwareInfo & info)
 {
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_init started");
   if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
   {
     return CallbackReturn::ERROR;
@@ -109,12 +110,14 @@ hardware_interface::CallbackReturn RobotSystem::on_init(
       return CallbackReturn::ERROR;
     }
   }
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_init finished");
   return CallbackReturn::SUCCESS;
 }
 
 hardware_interface::CallbackReturn RobotSystem::on_configure(
   const rclcpp_lifecycle::State & previous_state)
 {
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_configure started");
   executor_ =
     std::make_shared<rclcpp::executors::MultiThreadedExecutor>(rclcpp::ExecutorOptions(), 2);
   device_container_ = std::make_shared<ros2_canopen::DeviceContainer>(executor_);
@@ -132,24 +135,29 @@ hardware_interface::CallbackReturn RobotSystem::on_configure(
     RCLCPP_ERROR(robot_system_logger, "Could not join init thread!");
     return CallbackReturn::ERROR;
   }
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_configure finished");
   return CallbackReturn::SUCCESS;
 }
 hardware_interface::CallbackReturn RobotSystem::on_activate(
   const rclcpp_lifecycle::State & previous_state)
 {
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_activate started");
   for (auto & data : robot_motor_data_)
   {
     if (!data.driver->init_motor())
     {
       RCLCPP_ERROR(robot_system_logger, "Failed to activate '%s'", data.joint_name.c_str());
+      RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_activate finished -- failed");
       return CallbackReturn::FAILURE;
     }
   }
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_activate finished");
   return CallbackReturn::SUCCESS;
 }
 hardware_interface::CallbackReturn RobotSystem::on_deactivate(
   const rclcpp_lifecycle::State & previous_state)
 {
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_deactivate started");
   for (auto & data : robot_motor_data_)
   {
     if (!data.driver->halt_motor())
@@ -158,23 +166,30 @@ hardware_interface::CallbackReturn RobotSystem::on_deactivate(
       return CallbackReturn::FAILURE;
     }
   }
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_deactivate finished");
   return CallbackReturn::SUCCESS;
 }
 hardware_interface::CallbackReturn RobotSystem::on_cleanup(
   const rclcpp_lifecycle::State & previous_state)
 {
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_cleanup started");
   clean();
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_cleanup finished");
   return CallbackReturn::SUCCESS;
 }
 hardware_interface::CallbackReturn RobotSystem::on_shutdown(
   const rclcpp_lifecycle::State & previous_state)
 {
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_shutdown started");
   clean();
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "on_shutdown finished");
+
   return CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface> RobotSystem::export_state_interfaces()
 {
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "export_state_interfaces started");
   std::vector<hardware_interface::StateInterface> state_interfaces;
 
   // Iterate over joints in xacro
@@ -182,11 +197,13 @@ std::vector<hardware_interface::StateInterface> RobotSystem::export_state_interf
   {
     data.export_state_interface(state_interfaces);
   }
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "export_state_interfaces finished");
   return state_interfaces;
 }
 
 std::vector<hardware_interface::CommandInterface> RobotSystem::export_command_interfaces()
 {
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "export_command_interfaces started");
   std::vector<hardware_interface::CommandInterface> command_interfaces;
 
   // Iterate over joints in xacro
@@ -194,28 +211,32 @@ std::vector<hardware_interface::CommandInterface> RobotSystem::export_command_in
   {
     data.export_command_interface(command_interfaces);
   }
+  RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "export_command_interfaces finished");
   return command_interfaces;
 }
 
 hardware_interface::return_type RobotSystem::read(
   const rclcpp::Time & time, const rclcpp::Duration & period)
 {
+  // RCLCPP_INFO(rclcpp::get_logger("khyem nguyen"), "function read started");
   // Iterate over joints
   for (canopen_ros2_control::Cia402Data & data : robot_motor_data_)
   {
     data.read_state();
   }
-
+  // RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "function read  finished");
   return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type RobotSystem::write(
   const rclcpp::Time & time, const rclcpp::Duration & period)
 {
+  // RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "function write started");
   for (canopen_ros2_control::Cia402Data & data : robot_motor_data_)
   {
     data.write_target();
   }
+  // RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "function write  finished");
   return hardware_interface::return_type::OK;
 }
 

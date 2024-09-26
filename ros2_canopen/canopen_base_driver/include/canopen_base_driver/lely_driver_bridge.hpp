@@ -43,8 +43,10 @@
 
 #include "canopen_core/exchange.hpp"
 
+
 using namespace std::chrono_literals;
 using namespace lely;
+
 
 namespace ros2_canopen
 {
@@ -403,7 +405,7 @@ public:
    */
   LelyDriverBridge(
     ev_exec_t * exec, canopen::AsyncMaster & master, uint8_t id, std::string name, std::string eds,
-    std::string bin, std::chrono::milliseconds timeout = 20ms)
+    std::string bin, std::chrono::milliseconds timeout = 20ms) 
   : FiberDriver(exec, master, id),
     rpdo_queue(new SafeQueue<COData>()),
     emcy_queue(new SafeQueue<COEmcy>())
@@ -469,6 +471,7 @@ public:
         {
           prom->set_exception(
             lely::canopen::make_sdo_exception_ptr(id, idx, subidx, ec, "AsyncDownload"));
+            // std::cout << "khyem nguyen: SubmitWrite error - 472"<<std::endl;
         }
         else
         {
@@ -505,9 +508,11 @@ public:
     catch (std::exception & e)
     {
       RCLCPP_ERROR(rclcpp::get_logger(name_), e.what());
+      RCLCPP_ERROR(rclcpp::get_logger("khyem nguyen"), "Error read sdo-509");
     }
     return res;
   }
+
 
   /**
    * @brief Aynchronous SDO Read
@@ -587,6 +592,7 @@ public:
       std::cout << "sync_sdo_read_typed: id=" << (unsigned int)this->get_id() << " index=0x"
                 << std::hex << (unsigned int)idx << " subindex=" << (unsigned int)subidx
                 << " timed out." << std::endl;
+      std::cout << "khyem nguyen: wait_res - 592";
       return false;
     }
     bool res = false;
@@ -729,6 +735,7 @@ public:
         {
           this->sdo_write_data_promise->set_exception(
             lely::canopen::make_sdo_exception_ptr(id, idx, subidx, ec, "AsyncDownload"));
+            std::cout << "khyem nguyen: SubmitWrite error - 734"<<std::endl;
         }
         else
         {
@@ -840,10 +847,14 @@ public:
       this->dictionary_->setVal<T>(index, subindex, value);
       this->tpdo_mapped[index][subindex] = value;
       this->tpdo_mapped[index][subindex].WriteEvent();
+      // std::cout << "khyem nguyen: rpdo write - 847"<<std::endl;
     }
     else
     {
-      sync_sdo_write_typed(index, subindex, value, this->sdo_timeout);
+      // sync_sdo_write_typed(index, subindex, value, this->sdo_timeout);
+      // std::cout << "khyem nguyen: sync sdo write - 852"<<std::endl;
+      async_sdo_write_typed(index, subindex, value);
+      // std::cout << "khyem nguyen: async sdo write - 852"<<std::endl;
     }
   }
 };

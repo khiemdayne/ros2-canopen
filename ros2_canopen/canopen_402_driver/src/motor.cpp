@@ -36,6 +36,7 @@ bool Motor402::isModeSupported(uint16_t mode)
 bool Motor402::enterModeAndWait(uint16_t mode)
 {
   bool okay = mode != MotorBase::Homing && switchMode(mode);
+  RCLCPP_INFO(rclcpp::get_logger("khyemnguyen"), "Mode id: 0x%x", mode);
   return okay;
 }
 
@@ -63,7 +64,7 @@ void Motor402::registerMode(uint16_t id, const ModeSharedPtr & m)
 ModeSharedPtr Motor402::allocMode(uint16_t mode)
 {
   ModeSharedPtr res;
- 
+
   {
     std::scoped_lock map_lock(map_mutex_);
     std::unordered_map<uint16_t, ModeSharedPtr>::iterator it = modes_.find(mode);
@@ -237,70 +238,36 @@ bool Motor402::readState()
   {
     RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Mode does not match.");
   }
-  if (sw & (1 << State402::SW_Internal_limit))
-  {
-    if (old_sw & (1 << State402::SW_Internal_limit))
-    {
-      RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Internal limit active");
-    }
-    else
-    {
-      RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Internal limit active");
-    }
-  }
-
+  // if (!(sw & (1 << State402::SW_Internal_limit)))
+  // {
+  //   if (old_sw & (1 << State402::SW_Internal_limit))
+  //   {
+  //     RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Internal limit active");
+  //   }
+  //   else
+  //   {
+  //     RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Internal limit active");
+  //   }
+  // }
+// RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Read state mode id(6061): 0x%x", new_mode);
   return true;
 }
 void Motor402::handleRead() { readState(); }
-// void Motor402::handleWrite()
-// {
-//   std::scoped_lock lock(cw_mutex_);
-//   control_word_ |= (1 << Command402::CW_Halt);
-//   if (state_handler_.getState() == State402::Operation_Enable)
-//   {
-//     std::scoped_lock lock(mode_mutex_);
-//     Mode::OpModeAccesser cwa(control_word_);
-//     bool okay = false;
-//     if (selected_mode_ && selected_mode_->mode_id_ == mode_id_)
-//     {
-//       okay = selected_mode_->write(cwa);
-//     }
-//     else
-//     {
-//       cwa = 0;
-//     }
-//     if (okay)
-//     {
-//       control_word_ &= ~(1 << Command402::CW_Halt);
-//     }
-//   }
-//   if (start_fault_reset_.exchange(false))
-//   {
-//     RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Fault reset");
-//     this->driver->universal_set_value<uint16_t>(
-//       control_word_entry_index, 0x0, control_word_ & ~(1 << Command402::CW_Fault_Reset));
-//   }
-//   else
-//   {
-//     // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Control Word %s",
-//     // std::bitset<16>{control_word_}.to_string());
-//     this->driver->universal_set_value<uint16_t>(control_word_entry_index, 0x0, control_word_);
-//   }
-// }
+
 void Motor402::handleWrite() {
   std::scoped_lock lock(cw_mutex_);
-  control_word_|= (1 << Command402::CW_Halt);
+  // control_word_|= (1 << Command402::CW_Halt);
   if (state_handler_.getState() == State402::Operation_Enable) {
     std::scoped_lock     lock(mode_mutex_);
     Mode::OpModeAccesser cwa(control_word_);
-    bool                 okay= false;
+    bool okay= false;
     if (selected_mode_ && selected_mode_->mode_id_ == mode_id_) {
       okay= selected_mode_->write(cwa);
     } else {
       cwa= 0;
     }
     if (okay) {
-      control_word_&= ~(1 << Command402::CW_Halt);
+      // control_word_&= ~(1 << Command402::CW_Halt);
     }
   }
   if (start_fault_reset_.exchange(false)) {
@@ -309,10 +276,11 @@ void Motor402::handleWrite() {
         control_word_entry_index, 0x0,
         control_word_ & ~(1 << Command402::CW_Fault_Reset));
   } else {
-    // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Control Word %s",
+    // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver - khyem nguyen"), "Control Word %d",control_word_);
     // std::bitset<16>{control_word_}.to_string());
     this->driver->universal_set_value<uint16_t>(
         control_word_entry_index, 0x0, control_word_);
+        // control_word_entry_index, 0x0F, control_word_);
   }
 }
 void Motor402::handleDiag()
@@ -378,6 +346,8 @@ void Motor402::handleDiag()
 
 bool Motor402::handleInit()
 {
+  std::cout<<""<<std::endl;
+  std::cout<<"[---------------Init-------------khyemnguyen-------------]"<<std::endl;
   for (std::unordered_map<uint16_t, AllocFuncType>::iterator it = mode_allocators_.begin();
        it != mode_allocators_.end(); ++it)
   {
@@ -390,49 +360,43 @@ bool Motor402::handleInit()
     return false;
   }
   {
-    std::scoped_lock lock(cw_mutex_);
+    // std::scoped_lock lock(cw_mutex_);
     control_word_ = 0;
-    start_fault_reset_ = true;
+    // start_fault_reset_ = true;
   }
   RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Init: Enable");
   if (!switchState(State402::Operation_Enable))
   {
     std::cout << "Could not enable motor" << std::endl;
-    return false;
+    // return false;
   }
-// HUNGVU
-  // ModeSharedPtr m = allocMode(MotorBase::Homing);
-  // if (!m)
-  // {
-  //   std::cout << "Homeing mode not supported" << std::endl;
-  //   return true;  // homing not supported
-  // }
-
-  // HomingMode * homing = dynamic_cast<HomingMode *>(m.get());
-
-  // if (!homing)
-  // {
-  //   std::cout << "Homing mode has incorrect handler" << std::endl;
-  //   return false;
-  // }
-  // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Init: Switch to homing");
-  // if (!switchMode(MotorBase::Homing))
-  // {
-  //   std::cout << "Could not enter homing mode" << std::endl;
-  //   return false;
-  // }
-  // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Init: Execute homing");
-  // if (!homing->executeHoming())
-  // {
-  //   std::cout << "Homing failed" << std::endl;
-  //   return false;
-  // }
-  RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Init: Switch no mode");
-  if (!switchMode(MotorBase::No_Mode))
+  
+  RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Init: Switch velocity");
+  if (!switchMode(MotorBase::Profiled_Velocity))
   {
-    std::cout << "Could not enter no mode" << std::endl;
-    return false;
+    std::cout << "Could not enter vel" << std::endl;
+    // return false;
   }
+
+  // RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Init: Switch velocity");
+  // if (!switchMode(MotorBase::No_Mode))
+  // {
+  //   std::cout << "Could not enter no mode" << std::endl;
+  //   // return false;
+  // }
+
+  std::scoped_lock lock(cw_mutex_);
+  driver->universal_set_value<int16_t>(control_word_entry_index, 0x0, 0x06);
+  driver->universal_set_value<int16_t>(control_word_entry_index, 0x0, 0x07);
+  driver->universal_set_value<int32_t>(0x60FF, 0x0, 0x00);
+  
+  // control_word_ = 0x0F;
+  driver->universal_set_value<int8_t>(op_mode_index, 0x0, 3);
+  // std::cout << "Control world("<<control_word_entry_index<<"): "<<control_word_ << std::endl;
+  // std::cout << "Mode id: "<< Motor402::getMode()<<std::endl;
+  RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Control world(6040): 0x%x", control_word_);
+  RCLCPP_INFO(rclcpp::get_logger("canopen_402_driver"), "Mode id(6060): 0x%x", Motor402::getMode());
+
   return true;
 }
 bool Motor402::handleShutdown()

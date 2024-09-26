@@ -3,7 +3,6 @@
         {
             "browse": {
                 "databaseFilename": "${default}",
-                "limitSymbolsToIncludedHeaders": false
             },
             "includePath": [
                 "/opt/ros/humble/include/**",
@@ -14,19 +13,15 @@
                 "${workspaceFolder}/ros2_canopen/canopen_base_driver/**",
                 "${workspaceFolder}/ros2_canopen/canopen_core/**",
                 "${workspaceFolder}/ros2_canopen/canopen_fake_slaves/**",
-                "${workspaceFolder}/ros2_canopen/canopen_interfaces/**",
                 "${workspaceFolder}/ros2_canopen/canopen_master_driver/**",
                 "${workspaceFolder}/ros2_canopen/canopen_proxy_driver/**",
                 "${workspaceFolder}/ros2_canopen/canopen_ros2_control/**",
                 "${workspaceFolder}/ros2_canopen/canopen_ros2_controllers/**",
                 "${workspaceFolder}/ros2_canopen/canopen_tests/**",
-                "${workspaceFolder}/ros2_canopen/canopen_utils**",
-                "${workspaceFolder}/ros2_canopen/canopen_lely_core_libraries/**"
-                
+                "${workspaceFolder}/ros2_canopen/canopen_utils**"
             ],
             "name": "ROS",
             "intelliSenseMode": "gcc-x64",
-            "compilerPath": "/usr/bin/gcc",
             "cStandard": "gnu11",
             "cppStandard": "c++14"
         }
